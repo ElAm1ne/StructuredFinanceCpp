@@ -1,4 +1,5 @@
 #include "part.h"
+#include <cmath>
 
 Part::Part(double amount, Facility* facility, Borrower* borrower)
 : amount(amount), facility(facility), borrower(borrower) {}
@@ -28,7 +29,7 @@ void Part::setBorrower(Borrower* borrower) {
 }
 
 void Part::repay(double amount) {
-    this->amount -= amount;
-    facility->setAmount(facility->getAmount() - amount);
+    this->amount = std::max(this->amount - amount, 0.0);
+    facility->setAmount(std::max(facility->getAmount() - amount,0.0));
     facility->setInterest(facility->getAmount() * facility->getInterestRate());
 }
