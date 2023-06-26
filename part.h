@@ -3,6 +3,9 @@
 #include "facility.h"
 #include "borrower.h"
 
+// Forward declaration
+class Portfolio;
+
 class Part {
 public:
     Part(double amount, Facility* facility, Borrower* borrower);
@@ -12,7 +15,7 @@ public:
     void setAmount(double amount);
     void setFacility(Facility* facility);
     void setBorrower(Borrower* borrower);
-    void repay(double amount);
+    void repay(double amount, std::vector<Portfolio>& portfolios);
 
 private:
     double amount;

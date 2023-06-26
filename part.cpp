@@ -1,4 +1,5 @@
 #include "part.h"
+#include "portfolio.h"
 #include <cmath>
 
 Part::Part(double amount, Facility* facility, Borrower* borrower)
@@ -28,8 +29,17 @@ void Part::setBorrower(Borrower* borrower) {
     this->borrower = borrower;
 }
 
-void Part::repay(double amount) {
-    this->amount = std::max(this->amount - amount, 0.0);
-    facility->setAmount(std::max(facility->getAmount() - amount,0.0));
-    facility->setInterest(facility->getAmount() * facility->getInterestRate());
+void Part::repay(double amount, std::vector<Portfolio>& portfolios) {
+    double repayment = std::max(this->amount - amount, 0.0);
+    double interest = repayment * facility->getInterestRate();
+    facility->setInterest(interest);
+    for (Portfolio& portfolio : portfolios) {
+        if (portfolio.getBorrower() == this->borrower) {
+            portfolio.addInterest(interest); // add interest to the portfolio
+            break;
+        }
+    }
+    this->amount = repayment;
+    facility->setAmount(std::max(facility->getAmount() - amount, 0.0));
+    
 }
